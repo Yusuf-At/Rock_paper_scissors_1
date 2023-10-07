@@ -1,3 +1,11 @@
+const body = document.querySelector('body');
+const buttonDiv = document.querySelector('#button');
+const scoreTable = document.querySelector('#score');
+const input = document.querySelectorAll('#plyChoice');
+const selected = document.querySelector('#selected');
+const result = document.querySelector('#result');
+
+
 const choice = [
     "rock",
     "paper",
@@ -11,12 +19,6 @@ function getComputerChoice() {
     randomIndex = Math.floor(Math.random() * choice.length);
     return choice[randomIndex];
 }
-
-function plySelection() {
-    plyselection = prompt("Choose: paper, rock, or scissor");
-    return plyselection.toLowerCase();
-}
-
 
 function playRound(playerSelection, computerSelection) {
     if (computerSelection === "paper" && playerSelection === "rock" ) {
@@ -38,19 +40,58 @@ function playRound(playerSelection, computerSelection) {
     }
   }
 
-function game() {
-    playerSelection = plySelection();
-    computerSelection = getComputerChoice();
-    console.log(`computer = ${computerSelection}`)
-    console.log(`player = ${playerSelection}`)
+input.forEach(input =>
+    input.addEventListener('click', play));
 
-    console.log(playRound(playerSelection, computerSelection)) 
-    console.log(`Your score = ${playerScore}`)
-    console.log(`Computer score = ${compScore}`)
+function play(e) {
+    // save player selection
+    const plySelection = e.target.value;
+    console.log(plySelection);
+
+    function game() {
+        playerSelection = plySelection;
+        computerSelection = getComputerChoice();
+        console.log(`computer = ${computerSelection}`)
+        console.log(`player = ${playerSelection}`)
+
+        gameResult = playRound(playerSelection, computerSelection)
+        console.log(`Your score = ${playerScore}`)
+        console.log(`Computer score = ${compScore}`)
+    }
+    game()
+
+    // create div for selected 
+    selected.textContent = `Computer = ${computerSelection}, Player = ${playerSelection}`
+
+    // scoreTable
+    scoreTable.textContent = `computer = ${compScore}, player = ${playerScore}`
+
+    // result message
+    result.textContent = gameResult;
+
+    // Final Message
+    if (compScore === 5) {
+        result.textContent = 'Game Over, You Lose'
+        compScore = 0
+        playerScore = 0
+
+        // remove button
+        while (buttonDiv.firstChild) {
+            buttonDiv.removeChild(buttonDiv.firstChild)
+        }
+
+    } else if (playerScore === 5) {
+        result.textContent = 'Game Over, You Win'
+        compScore = 0
+        playerScore = 0
+
+        // remove button
+        while (buttonDiv.firstChild) {
+            buttonDiv.removeChild(buttonDiv.firstChild)
+        }
+    }
 }
 
-console.log(game())
-console.log(game())
-console.log(game())
-console.log(game())
-console.log(game())
+function playAgain() {
+
+}
